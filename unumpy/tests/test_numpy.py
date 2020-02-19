@@ -281,3 +281,25 @@ def test_array_creation(backend, method, args, kwargs):
         assert ret.dtype == ndt(dtype)
     else:
         assert ret.dtype == dtype
+
+
+@pytest.mark.parametrize("method, args, kwargs", [(np.random.rand, (1, 2), {})])
+def test_random(backend, method, args, kwargs):
+    backend, types = backend
+    for dtype in dtypes:
+        try:
+            with ua.set_backend(backend, coerce=True):
+                ret = method(*args, **kwargs)
+        except ua.BackendNotImplementedError:
+            if backend in FULLY_TESTED_BACKENDS and (backend, method) not in EXCEPTIONS:
+                raise
+            pytest.xfail(reason="The backend has no implementation for this ufunc.")
+
+    assert isinstance(ret, types)
+
+    if isinstance(ret, da.Array):
+        ret.compute()
+    if XndBackend is not None and backend == XndBackend:
+        assert ret.dtype == ndt(dtype)
+    else:
+        assert ret.dtype == dtype

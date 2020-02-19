@@ -17,6 +17,7 @@ _implementations: Dict = {
     unumpy.count_nonzero: lambda a, axis=None: np.asarray(np.count_nonzero(a, axis))[
         ()
     ],
+    unumpy.random.rand: np.random.rand,
 }
 
 

@@ -151,6 +151,7 @@ True
 True
 """
 from ._multimethods import *
+from .random import *
 
 from ._version import get_versions
 
