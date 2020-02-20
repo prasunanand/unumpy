@@ -18,6 +18,7 @@ _implementations: Dict = {
         ()
     ],
     unumpy.random.rand: np.random.rand,
+    unumpy.random.randn: np.random.randn,
 }
 
 

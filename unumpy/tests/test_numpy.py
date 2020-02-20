@@ -283,7 +283,61 @@ def test_array_creation(backend, method, args, kwargs):
         assert ret.dtype == dtype
 
 
-@pytest.mark.parametrize("method, args, kwargs", [(np.random.rand, (1, 2), {})])
+@pytest.mark.parametrize(
+    "method, args, kwargs",
+    [
+        (np.random.rand, (1, 2), {}),
+        (np.random.randn, (1, 2), {})
+        (np.random.randint, (1, 2), {}),
+        (np.random.random_integers, (1, 2), {}),
+        (np.random.random_sample, (1, 2), {}),
+        (np.random.random, (1, 2), {}),
+        (np.random.ranf, (1, 2), {}),
+        (np.random.sample, (1, 2), {}),
+        (np.random.choice, (1, 2), {}),
+        (np.random.bytes, (1, 2), {}),
+        (np.random.shuffle, (1, 2), {}),
+        (np.random.permutation, (1, 2), {}),
+        (np.random.beta, (1, 2), {}),
+        (np.random.binomial, (1, 2), {}),
+        (np.random.chisquare, (1, 2), {}),
+        (np.random.dirichlet, (1, 2), {}),
+        (np.random.exponential, (1, 2), {}),
+        (np.random.f, (1, 2), {}),
+        (np.random.gamma, (1, 2), {}),
+        (np.random.geometric, (1, 2), {}),
+        (np.random.gumbel, (1, 2), {}),
+        (np.random.hypergeometric, (1, 2), {}),
+        (np.random.laplace, (1, 2), {}),
+        (np.random.logistic, (1, 2), {}),
+        (np.random.lognormal, (1, 2), {}),
+        (np.random.logseries, (1, 2), {}),
+        (np.random.multinomial, (1, 2), {}),
+        (np.random.multivariate_normal, (1, 2), {}),
+        (np.random.negative_binomial, (1, 2), {}),
+        (np.random.noncentral_chisquare, (1, 2), {}),
+        (np.random.noncentral_f, (1, 2), {}),
+        (np.random.normal, (1, 2), {}),
+        (np.random.pareto, (1, 2), {}),
+        (np.random.poisson, (1, 2), {}),
+        (np.random.power, (1, 2), {}),
+        (np.random.rayleigh, (1, 2), {}),
+        (np.random.standard_cauchy, (1, 2), {}),
+        (np.random.standard_exponential, (1, 2), {}),
+        (np.random.standard_gamma, (1, 2), {}),
+        (np.random.standard_normal, (1, 2), {}),
+        (np.random.standard_t, (1, 2), {}),
+        (np.random.triangular, (1, 2), {}),
+        (np.random.uniform, (1, 2), {}),
+        (np.random.vonmises, (1, 2), {}),
+        (np.random.wald, (1, 2), {}),
+        (np.random.weibull, (1, 2), {}),
+        (np.random.zipf, (1, 2), {}),
+        (np.random.seed, (1, 2), {}),
+        (np.random.get_state, (1, 2), {}),
+        (np.random.set_state, (1, 2), {}),
+    ],
+)
 def test_random(backend, method, args, kwargs):
     backend, types = backend
     for dtype in dtypes:
