@@ -287,8 +287,8 @@ def test_array_creation(backend, method, args, kwargs):
     "method, args, kwargs",
     [
         (np.random.rand, (1, 2), {}),
-        (np.random.randn, (1, 2), {})
-        (np.random.randint, (1, 2), {}),
+        (np.random.randn, (1, 2), {}),
+        (np.random.randint, (2,), {}),
         (np.random.random_integers, (1, 2), {}),
         (np.random.random_sample, (1, 2), {}),
         (np.random.random, (1, 2), {}),

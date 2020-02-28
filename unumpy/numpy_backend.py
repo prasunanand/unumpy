@@ -1,6 +1,6 @@
 import numpy as np
 from uarray import Dispatchable, wrap_single_convertor
-from unumpy import ufunc, ufunc_list, ndarray, dtype
+from unumpy import ufunc, ufunc_list, ndarray, dtype, random
 import unumpy
 import functools
 
