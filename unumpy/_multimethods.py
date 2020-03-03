@@ -161,6 +161,7 @@ class ndarray:
 class dtype:
     pass
 
+
 class ufunc:
     def __init__(self, name, nin, nout):
         self.name = name

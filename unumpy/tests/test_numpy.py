@@ -15,7 +15,7 @@ ua.set_global_backend(NumpyBackend)
 
 dtypes = ["int8", "int16", "int32", "float32", "float64"]
 LIST_BACKENDS = [
-    (NumpyBackend, (onp.ndarray, onp.generic)),
+    (NumpyBackend, (onp.ndarray, onp.generic, onp.random)),
     (DaskBackend, (da.Array, onp.generic)),
     (SparseBackend, (sparse.SparseArray, onp.ndarray, onp.generic)),
     pytest.param(

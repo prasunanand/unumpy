@@ -17,8 +17,6 @@ _implementations: Dict = {
     unumpy.count_nonzero: lambda a, axis=None: np.asarray(np.count_nonzero(a, axis))[
         ()
     ],
-    unumpy.random.rand: np.random.rand,
-    unumpy.random.randn: np.random.randn,
 }
 
 
@@ -26,10 +24,12 @@ def __ua_function__(method, args, kwargs):
     if method in _implementations:
         return _implementations[method](*args, **kwargs)
 
-    if not hasattr(np, method.__name__):
+    if hasattr(np, method.__name__):
+        return getattr(np, method.__name__)(*args, **kwargs)
+    elif hasattr(np.random, method.__name__):
+        return getattr(np.random, method.__name__)(*args, **kwargs)
+    else:
         return NotImplemented
-
-    return getattr(np, method.__name__)(*args, **kwargs)
 
 
 @wrap_single_convertor

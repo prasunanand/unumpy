@@ -29,7 +29,7 @@ def randint(low, high=None, size=None, dtype="l"):
 @create_numpy(_self_argreplacer)
 @all_of_type(ndarray)
 def random_integers(low, high=None, size=None):
-	return low
+    return low
 
 
 @create_numpy(_self_argreplacer)
@@ -41,7 +41,8 @@ def random_sample(size=None):
 @create_numpy(_self_argreplacer)
 @all_of_type(ndarray)
 def random(size=None):
-	return size
+    return size
+
 
 @create_numpy(_self_argreplacer)
 @all_of_type(ndarray)
