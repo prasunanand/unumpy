@@ -5,13 +5,18 @@ import builtins
 
 create_numpy = functools.partial(create_multimethod, domain="numpy")
 
-from .._multimethods import ndarray, _self_argreplacer
+from .._multimethods import (
+    ndarray,
+    _identity_argreplacer,
+    _self_argreplacer,
+    _dtype_argreplacer,
+    mark_dtype,
+)
 
 
-@create_numpy(_self_argreplacer)
-@all_of_type(ndarray)
+@create_numpy(_identity_argreplacer)
 def rand(*tup):
-    return tup
+    return ()
 
 
 @create_numpy(_self_argreplacer)
@@ -20,10 +25,10 @@ def randn(*tup):
     return tup
 
 
-@create_numpy(_self_argreplacer)
+@create_numpy(_dtype_argreplacer)
 @all_of_type(ndarray)
 def randint(low, high=None, size=None, dtype="l"):
-    return low
+    return mark_dtype(dtype)
 
 
 @create_numpy(_self_argreplacer)
@@ -90,6 +95,12 @@ def beta(a, b, size=None):
 @all_of_type(ndarray)
 def binomial(n, p, size=None):
     return (n, p, size)
+
+
+@create_numpy(_identity_argreplacer)
+@all_of_type(ndarray)
+def chisquare(df, size=None):
+    return ()
 
 
 @create_numpy(_self_argreplacer)
