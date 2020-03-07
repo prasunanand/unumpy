@@ -281,3 +281,34 @@ def test_array_creation(backend, method, args, kwargs):
         assert ret.dtype == ndt(dtype)
     else:
         assert ret.dtype == dtype
+
+
+@pytest.mark.parametrize(
+    "method, args, kwargs",
+    [
+        (np.linalg.cholesky, ([[1, -2j], [2j, 5]],), {}),
+        (np.linalg.qr, ([[1, 2], [3, 4]],), {}),
+        (np.linalg.svd, ([[1, 2], [3, 4]],), {}),
+        (np.linalg.eig, ([[1, 1j], [-1j, 1]],), {}),
+        (np.linalg.eigh, ([[1, -2j], [2j, 5]],), {}),
+        (np.linalg.eigvals, ([[1, 2], [3, 4]],), {}),
+        (np.linalg.eigvalsh, ([[1, -2j], [2j, 5]],), {}),
+        (np.linalg.norm, ([[1, 2], [3, 4]],), {}),
+        (np.linalg.cond, ([[1, 0, -1], [0, 1, 0], [1, 0, 1]],), {}),
+        (np.linalg.det, ([[1, 2], [3, 4]],), {}),
+        (np.linalg.matrix_rank, (np.eye(4),), {}),
+        (np.linalg.slogdet, ([[1, 2], [3, 4]],), {}),
+    ],
+)
+def test_linalg(backend, method, args, kwargs):
+    backend, types = backend
+    try:
+        with ua.set_backend(NumpyBackend, coerce=True):
+            ret = method(*args, **kwargs)
+    except ua.BackendNotImplementedError:
+        if backend in FULLY_TESTED_BACKENDS and (backend, method) not in EXCEPTIONS:
+            raise
+        pytest.xfail(reason="The backend has no implementation for this ufunc.")
+
+    if isinstance(ret, da.Array):
+        ret.compute()
