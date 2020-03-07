@@ -281,3 +281,41 @@ def test_array_creation(backend, method, args, kwargs):
         assert ret.dtype == ndt(dtype)
     else:
         assert ret.dtype == dtype
+
+
+@pytest.mark.parametrize(
+    "method, args, kwargs",
+    [
+        # (np.fft.fft, (4 * np.eye(4),), {}),
+        (np.fft.ifft, ([[1, 2], [3, 4]],), {}),
+        (np.fft.fft2, (4 * np.eye(4),), {}),
+        (np.fft.ifft2, (4 * np.eye(4),), {}),
+        (np.fft.fftn, (4 * np.eye(4),), {}),
+        (np.fft.ifftn, (4 * np.eye(4),), {}),
+        (np.fft.rfft, (4 * np.eye(4),), {}),
+        (np.fft.irfft, (4 * np.eye(4),), {}),
+        (np.fft.rfft2, (4 * np.eye(4),), {}),
+        (np.fft.irfft2, (4 * np.eye(4),), {}),
+        (np.fft.rfftn, (4 * np.eye(4),), {}),
+        (np.fft.irfftn, (4 * np.eye(4)), {}),
+        (np.fft.hfft, (4 * np.eye(4)), {}),
+        (np.fft.ihfft, (4 * np.eye(4)), {}),
+        (np.fft.rfftn, (4 * np.eye(4)), {}),
+        (np.fft.fftfreq, (10), {}),
+        (np.fft.rfftfreq, (10), {}),
+        (np.fft.fftshift, (4 * np.eye(4),), {}),
+        (np.fft.ifftshift, (4 * np.eye(4),), {}),
+    ],
+)
+def test_fft(backend, method, args, kwargs):
+    backend, types = backend
+    try:
+        with ua.set_backend(backend, coerce=True):
+            ret = method(*args, **kwargs)
+    except ua.BackendNotImplementedError:
+        if backend in FULLY_TESTED_BACKENDS and (backend, method) not in EXCEPTIONS:
+            raise
+        pytest.xfail(reason="The backend has no implementation for this ufunc.")
+
+    if isinstance(ret, da.Array):
+        ret.compute()
