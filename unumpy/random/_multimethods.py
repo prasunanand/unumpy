@@ -27,8 +27,8 @@ def randn(*tup):
 
 @create_numpy(_dtype_argreplacer)
 @all_of_type(ndarray)
-def randint(low, high=None, size=None, dtype=None):
-    return mark_dtype(dtype)
+def randint(low, high=None, size=None, dtype="int64"):
+    return (mark_dtype(dtype),)
 
 
 @create_numpy(_identity_argreplacer)
@@ -76,13 +76,13 @@ def bytes(length):
 @create_numpy(_self_argreplacer)
 @all_of_type(ndarray)
 def shuffle(x):
-    return x
+    return (x,)
 
 
-@create_numpy(_identity_argreplacer)
+@create_numpy(_self_argreplacer)
 @all_of_type(ndarray)
 def permutation(x):
-    return x
+    return (x,)
 
 
 @create_numpy(_identity_argreplacer)
@@ -103,10 +103,10 @@ def chisquare(df, size=None):
     return ()
 
 
-@create_numpy(_identity_argreplacer)
+@create_numpy(_self_argreplacer)
 @all_of_type(ndarray)
 def dirichlet(alpha, size=None):
-    return ()
+    return (alpha,)
 
 
 @create_numpy(_identity_argreplacer)
