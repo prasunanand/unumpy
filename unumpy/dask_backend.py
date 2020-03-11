@@ -7,18 +7,30 @@ from uarray import (
     get_state,
     set_state,
 )
-from unumpy import ufunc, ufunc_list, ndarray
+from unumpy import ufunc, ufunc_list, ndarray, random
 import unumpy
 import functools
 import sys
 import collections
 import itertools
-import random
+from random import randrange
 
 from typing import Dict
 
 _ufunc_mapping: Dict[ufunc, np.ufunc] = {}
 __ua_domain__ = "numpy"
+
+EXCEPTIONS = [
+    unumpy.random.rand,
+    unumpy.random.randn,
+    unumpy.random.ranf,
+    unumpy.random.sample,
+    unumpy.random.bytes,
+    unumpy.random.shuffle,
+    unumpy.random.dirichlet,
+    unumpy.random.multivariate_normal,
+    unumpy.random.get_state,
+]
 
 
 def wrap_current_state(func):
@@ -60,7 +72,7 @@ def wrap_uniform_create(func):
                 chunks[-1].append(s)
                 l -= s
 
-        name = func.__name__ + "-" + hex(random.randrange(2 ** 64))
+        name = func.__name__ + "-" + hex(randrange(2 ** 64))
         dsk = {}
         with skip_backend(sys.modules[__name__]):
             for chunk_id in itertools.product(*map(lambda x: range(len(x)), chunks)):
@@ -87,10 +99,14 @@ def __ua_function__(method, args, kwargs):
     if method in _implementations:
         return _implementations[method](*args, **kwargs)
 
-    if not hasattr(da, method.__name__):
+    if method.__module__ == "unumpy._multimethods" and hasattr(da, method.__name__):
+        return getattr(da, method.__name__)(*args, **kwargs)
+    elif (
+        method.__module__ == "unumpy.random._multimethods" and method not in EXCEPTIONS
+    ):
+        return getattr(da.random, method.__name__)(*args, **kwargs)
+    else:
         return NotImplemented
-
-    return getattr(da, method.__name__)(*args, **kwargs)
 
 
 @wrap_single_convertor

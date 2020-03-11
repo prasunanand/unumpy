@@ -24,9 +24,9 @@ def __ua_function__(method, args, kwargs):
     if method in _implementations:
         return _implementations[method](*args, **kwargs)
 
-    if hasattr(np, method.__name__):
+    if method.__module__ == "unumpy._multimethods":
         return getattr(np, method.__name__)(*args, **kwargs)
-    elif hasattr(np.random, method.__name__):
+    elif method.__module__ == "unumpy.random._multimethods":
         return getattr(np.random, method.__name__)(*args, **kwargs)
     else:
         return NotImplemented

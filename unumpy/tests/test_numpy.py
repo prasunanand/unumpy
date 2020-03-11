@@ -69,6 +69,15 @@ EXCEPTIONS = {
     (DaskBackend, np.sort_complex),
     (DaskBackend, np.msort),
     (DaskBackend, np.searchsorted),
+    (DaskBackend, np.random.rand),
+    (DaskBackend, np.random.randn),
+    (DaskBackend, np.random.ranf),
+    (DaskBackend, np.random.sample),
+    (DaskBackend, np.random.bytes),
+    (DaskBackend, np.random.shuffle),
+    (DaskBackend, np.random.dirichlet),
+    (DaskBackend, np.random.multivariate_normal),
+    (DaskBackend, np.random.get_state),
 }
 
 
@@ -291,10 +300,10 @@ def test_array_creation(backend, method, args, kwargs):
         (np.random.randint, ([1, 2],), {}),
         (np.random.random_integers, (1, 2), {}),
         (np.random.random_sample, (), {}),
-        # (np.random.random, (), {}),
+        (np.random.random, ((2, 2),), {}),
         (np.random.ranf, (), {}),
         (np.random.sample, (), {}),
-        (np.random.choice, (1, 2), {}),
+        (np.random.choice, ([1, 2],), {}),
         (np.random.bytes, (10,), {}),
         (np.random.shuffle, ([10, 11, 12],), {}),
         (np.random.permutation, ([10, 11, 12],), {}),
@@ -341,10 +350,14 @@ def test_array_creation(backend, method, args, kwargs):
 def test_random(backend, method, args, kwargs):
     backend, types = backend
     try:
-        with ua.set_backend(NumpyBackend, coerce=True):
+        with ua.set_backend(backend, coerce=True):
             ret = method(*args, **kwargs)
     except ua.BackendNotImplementedError:
-        if backend in FULLY_TESTED_BACKENDS and (backend, method) not in EXCEPTIONS:
+        if (
+            backend in FULLY_TESTED_BACKENDS
+            and (backend, method) not in EXCEPTIONS
+            and backend is not XndBackend
+        ):
             raise
         pytest.xfail(reason="The backend has no implementation for this ufunc.")
 
